@@ -86,6 +86,7 @@ distros = [
     ("MakuluLinux", "Jacque Montague Raymer"),
     ("Nexenta OS", "Nexenta Systems, Inc."),
     ("NuTyX", "NuTyX Team"),
+    ("Peppermint", "Peppermint OS LLC"),
     ("Remix OS", "Jide Technology"),
     ("Void", "Void Linux Team"),
     ("Robolinux", "John Martinson"),
@@ -104,26 +105,51 @@ distros = [
     ("RasPlex", "RasPlex Team")
 ]
 
+# Function to show distro details in a new window
+def show_distro_details(distro_name):
+    for distro, developer in distros:
+        if distro.lower() == distro_name.lower():
+            details_window = tk.Toplevel(root)
+            details_window.title(distro)
+            
+            name_label = tk.Label(details_window, text=distro, font=("Arial", 20, "bold"))
+            name_label.pack(pady=10)
+            
+            developer_label = tk.Label(details_window, text=developer, font=("Arial", 12))
+            developer_label.pack(pady=5)
+            break
+
+# Function to update suggestions based on input
+def update_suggestions(event):
+    input_text = entry.get().lower()
+    suggestions = [distro for distro, _ in distros if input_text in distro.lower()]
+    
+    listbox.delete(0, tk.END)
+    for suggestion in suggestions:
+        listbox.insert(tk.END, suggestion)
+
+# Function to handle Enter key press
+def on_enter(event):
+    selected_distro = listbox.get(tk.ACTIVE)
+    show_distro_details(selected_distro)
+
 # Create the main window
 root = tk.Tk()
 root.title("Linux Distros and Their Developers")
 
-# Create a frame for the listbox and scrollbar
-frame = tk.Frame(root)
-frame.pack(pady=20)
+# Create the text entry for input
+entry = tk.Entry(root, width=50)
+entry.pack(pady=20)
+entry.bind("<KeyRelease>", update_suggestions)
+entry.bind("<Return>", on_enter)
 
-# Create the listbox
-listbox = tk.Listbox(frame, width=50, height=20)
-listbox.pack(side=tk.LEFT, fill=tk.BOTH)
+# Create a listbox for suggestions
+listbox = tk.Listbox(root, width=50, height=15)
+listbox.pack(pady=10)
 
-# Create a scrollbar and attach it to the listbox
-scrollbar = tk.Scrollbar(frame, orient=tk.VERTICAL, command=listbox.yview)
-scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-listbox.config(yscrollcommand=scrollbar.set)
-
-# Add distros and developers to the listbox
-for distro, developer in distros:
-    listbox.insert(tk.END, f"{distro} - {developer}")
+# Initial population of the listbox with all distros
+for distro, _ in distros:
+    listbox.insert(tk.END, distro)
 
 # Run the application
 root.mainloop()
