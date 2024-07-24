@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-# Data for Linux distros and their developers
+# Distros
 distros = [
     ("Ubuntu", "Canonical Ltd."),
     ("Debian", "Debian Project"),
@@ -128,6 +128,7 @@ def update_suggestions(event):
     for suggestion in suggestions:
         listbox.insert(tk.END, suggestion)
 
+            ##BROKEN!!!
 # Function to handle Enter key press
 def on_enter(event):
     selected_distro = listbox.get(tk.ACTIVE)
